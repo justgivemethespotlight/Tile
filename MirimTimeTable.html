@@ -23,6 +23,7 @@
       --today: rgba(59, 130, 246, 0.08);
       --current: rgba(16, 185, 129, 0.12);
       --current-border: rgba(16, 185, 129, 0.34);
+      --current-bar: rgba(255, 59, 48, 0.9);
       --toggle-bg: rgba(17, 24, 39, 0.06);
     }
 
@@ -43,6 +44,7 @@
       --today: rgba(96, 165, 250, 0.14);
       --current: rgba(16, 185, 129, 0.16);
       --current-border: rgba(52, 211, 153, 0.45);
+      --current-bar: rgba(255, 69, 58, 0.95);
       --toggle-bg: rgba(255, 255, 255, 0.08);
     }
 
@@ -236,6 +238,7 @@
 
     tbody th,
     tbody td {
+      position: relative;
       background: transparent;
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
@@ -336,6 +339,46 @@
       box-shadow: inset 0 0 0 1px var(--current-border);
     }
 
+    tbody tr.current-row > th::after,
+    tbody tr.current-row > td::after {
+      content: "";
+      position: absolute;
+      left: -1px;
+      right: -1px;
+      top: 10px;
+      height: 2px;
+      background: var(--current-bar);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    tbody tr.current-row > th::after {
+      left: 12px;
+      border-top-left-radius: 999px;
+      border-bottom-left-radius: 999px;
+    }
+
+    tbody tr.current-row > td:last-child::after {
+      right: 12px;
+      border-top-right-radius: 999px;
+      border-bottom-right-radius: 999px;
+    }
+
+    tbody tr.current-row > td.current-cell::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: var(--current-bar);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--current-bar) 18%, transparent);
+      z-index: 2;
+      pointer-events: none;
+    }
+
     thead th.today-column-header {
       background: var(--today);
     }
@@ -427,6 +470,17 @@
       .room-info,
       .teacher-info {
         font-size: 0.67rem;
+      }
+
+      tbody tr.current-row > th::after,
+      tbody tr.current-row > td::after {
+        top: 8px;
+      }
+
+      tbody tr.current-row > td.current-cell::before {
+        top: 5px;
+        width: 8px;
+        height: 8px;
       }
 
       .theme-toggle {
@@ -761,7 +815,7 @@
 
     function getCurrentSubjectAndRoom(currentSchedule, dayOfWeek) {
       if (!currentSchedule) {
-        return { subject: "수업 시간 아님", room: "미지정" };
+        return { subject: "일과 시간 아님", room: "미지정" };
       }
 
       if (currentSchedule.merged) {
@@ -837,8 +891,8 @@
           currentRoomEl.textContent = room;
         }
       } else {
-        if (currentPeriodEl) currentPeriodEl.textContent = "수업 시간 아님";
-        if (remainingTimeEl) remainingTimeEl.textContent = "다음 일정 대기";
+        if (currentPeriodEl) currentPeriodEl.textContent = "일과 시간 아님";
+        if (remainingTimeEl) remainingTimeEl.textContent = "일과 시간 아님";
         if (currentRoomEl) currentRoomEl.textContent = dayOfWeek === 0 || dayOfWeek === 6 ? "주말" : "미지정";
       }
 
