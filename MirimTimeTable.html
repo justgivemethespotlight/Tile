@@ -6,6 +6,46 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <title>미림마이스터고등학교 1-2 시간표</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f5f7;
+      --bg-grad-top: #ffffff;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: rgba(255, 255, 255, 0.92);
+      --surface-soft: rgba(247, 247, 250, 0.95);
+      --text: #111827;
+      --text-soft: #6b7280;
+      --border: rgba(17, 24, 39, 0.08);
+      --shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+      --header: rgba(250, 250, 252, 0.92);
+      --accent: #111827;
+      --accent-soft: rgba(17, 24, 39, 0.05);
+      --today: rgba(59, 130, 246, 0.08);
+      --current: rgba(16, 185, 129, 0.12);
+      --current-border: rgba(16, 185, 129, 0.34);
+      --toggle-bg: rgba(17, 24, 39, 0.06);
+    }
+
+    body.dark-mode {
+      color-scheme: dark;
+      --bg: #0f1115;
+      --bg-grad-top: #191d24;
+      --surface: rgba(19, 23, 31, 0.84);
+      --surface-strong: rgba(19, 23, 31, 0.94);
+      --surface-soft: rgba(26, 31, 41, 0.94);
+      --text: #f3f4f6;
+      --text-soft: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 22px 54px rgba(0, 0, 0, 0.35);
+      --header: rgba(26, 31, 41, 0.94);
+      --accent: #f9fafb;
+      --accent-soft: rgba(255, 255, 255, 0.07);
+      --today: rgba(96, 165, 250, 0.14);
+      --current: rgba(16, 185, 129, 0.16);
+      --current-border: rgba(52, 211, 153, 0.45);
+      --toggle-bg: rgba(255, 255, 255, 0.08);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -13,166 +53,308 @@
     body {
       margin: 0;
       font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      background: #f7f7f8;
-      color: #1f2937;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.88) 0%, transparent 34%),
+        linear-gradient(180deg, var(--bg-grad-top) 0%, var(--bg) 100%);
+      color: var(--text);
       padding: 32px 16px;
+      transition: background 0.28s ease, color 0.28s ease;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1240px;
       margin: 0 auto;
-      background: #ffffff;
-      border-radius: 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      background: var(--surface);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
       padding: 28px;
-      overflow-x: auto;
+      overflow: hidden;
+      transition: background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .hero-copy {
+      min-width: 220px;
     }
 
     h1 {
       margin: 0 0 8px;
-      text-align: center;
-      font-size: 2rem;
+      font-size: clamp(1.9rem, 2.8vw, 2.4rem);
+      letter-spacing: -0.03em;
+      color: var(--accent);
+      text-align: left;
     }
 
     .subtitle {
-      text-align: center;
-      margin: 0 0 24px;
-      color: #6b7280;
-      font-size: 1rem;
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 0.98rem;
+      letter-spacing: -0.01em;
+      text-align: left;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .theme-toggle {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--toggle-bg);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      background: var(--accent-soft);
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .status-card,
+    .summary-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      transition: background 0.28s ease, border-color 0.28s ease;
     }
 
     .status-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
-      margin: 0 0 24px;
-      padding: 14px 16px;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      background: #fbfbfc;
-      flex-wrap: wrap;
+    }
+
+    .summary-card {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 16px;
     }
 
     .status-item {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
+      min-width: 0;
     }
 
-    .status-label {
+    .status-label,
+    .summary-label {
       font-size: 0.8rem;
-      color: #6b7280;
+      color: var(--text-soft);
       font-weight: 600;
+      letter-spacing: -0.01em;
     }
 
-    .status-value {
+    .status-value,
+    .summary-value {
       font-size: 1rem;
-      color: #111827;
+      color: var(--text);
       font-weight: 700;
       line-height: 1.35;
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+    }
+
+    .table-shell {
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 14px;
+      overflow-x: auto;
+      transition: background 0.28s ease, border-color 0.28s ease;
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 900px;
+      min-width: 980px;
+      border-collapse: separate;
+      border-spacing: 0;
       table-layout: fixed;
-      overflow: hidden;
-      border-radius: 14px;
-      background: #ffffff;
+      color: var(--text);
+    }
+
+    col.time-col {
+      width: 18%;
+    }
+
+    col.day-col {
+      width: 16.4%;
     }
 
     thead th {
-      background: #f3f4f6;
-      color: #111827;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: var(--header);
+      color: var(--accent);
       font-weight: 700;
-      padding: 14px 10px;
-      border: 1px solid #e5e7eb;
+      padding: 16px 12px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
       text-align: center;
       vertical-align: middle;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    thead th:first-child {
+      border-left: 1px solid var(--border);
+      border-top-left-radius: 16px;
+    }
+
+    thead th:last-child {
+      border-top-right-radius: 16px;
+    }
+
+    tbody th,
+    tbody td {
+      background: transparent;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 12px;
+      text-align: center;
+      vertical-align: middle;
+      transition: background-color 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+    }
+
+    tbody tr > *:first-child {
+      border-left: 1px solid var(--border);
+    }
+
+    tbody tr:last-child > *:first-child {
+      border-bottom-left-radius: 16px;
+    }
+
+    tbody tr:last-child > *:last-child {
+      border-bottom-right-radius: 16px;
     }
 
     tbody th {
-      background: #f9fafb;
-      color: #374151;
+      background: var(--header);
+      color: var(--accent);
       font-weight: 700;
-      padding: 12px 10px;
-      border: 1px solid #e5e7eb;
       white-space: normal;
       word-break: keep-all;
-      font-size: 0.88rem;
-      line-height: 1.35;
-      text-align: center;
-      vertical-align: middle;
-    }
-
-    td {
-      border: 1px solid #e5e7eb;
-      padding: 12px 10px;
-      text-align: center;
-      vertical-align: middle;
-      font-size: 0.95rem;
-      line-height: 1.45;
-      background: #ffffff;
-      transition: background-color 0.15s ease;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-    }
-
-    td:hover {
-      background: #f9fafb;
-    }
-
-    .java,
-    .korean,
-    .english,
-    .math,
-    .history,
-    .japanese,
-    .media,
-    .career,
-    .sports,
-    .techhome,
-    .club,
-    .after,
-    .self {
-      background: #ffffff;
-    }
-    .after {
       font-size: 0.9rem;
       line-height: 1.35;
     }
 
-    .meal {
-      background: #f9fafb;
-      color: #6b7280;
-      font-weight: 600;
-      text-align: center;
-      letter-spacing: 0.02em;
+    td {
+      font-size: 0.96rem;
+      line-height: 1.45;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      color: var(--text);
     }
-    .homeroom {
-      background: #f9fafb;
-      color: #6b7280;
-      font-weight: 600;
-      text-align: center;
-      letter-spacing: 0.02em;
+
+    td:hover {
+      background: var(--accent-soft);
     }
 
     .time {
       display: inline-block;
-      margin-top: 2px;
-      font-size: 0.74rem;
-      color: #6b7280;
+      margin-top: 4px;
+      font-size: 0.76rem;
+      color: var(--text-soft);
       font-weight: 500;
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
-    .note {
-      margin-top: 18px;
-      color: #6b7280;
-      font-size: 0.92rem;
-      text-align: right;
+    .subject {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 56px;
+    }
+
+    .subject-name {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .room-info {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--text-soft);
+      font-size: 0.73rem;
+      font-weight: 600;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .meal,
+    .homeroom {
+      background: transparent;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    tbody tr.today-row > th,
+    tbody tr.today-row > td.today-cell {
+      background: var(--today);
+    }
+
+    tbody tr.current-row > th,
+    tbody tr.current-row > td.current-cell {
+      background: var(--current);
+      box-shadow: inset 0 0 0 1px var(--current-border);
+    }
+
+    thead th.today-column-header {
+      background: var(--today);
+    }
+
+    thead th.current-day-column-header {
+      box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.3);
+    }
+
+    .empty-cell {
+      color: transparent;
+    }
+
+    @media (max-width: 980px) {
+      .top-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .status-card {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 768px) {
@@ -182,199 +364,395 @@
 
       .container {
         padding: 18px;
-        border-radius: 18px;
+        border-radius: 22px;
+      }
+
+      .hero {
+        margin-bottom: 18px;
       }
 
       h1 {
-        font-size: 1.5rem;
+        font-size: 1.55rem;
       }
 
-      td, thead th, tbody th {
-        font-size: 0.8rem;
-        padding: 9px 6px;
+      .subtitle {
+        font-size: 0.9rem;
+      }
+
+      .status-card,
+      .summary-card {
+        padding: 14px;
+        border-radius: 18px;
+      }
+
+      .status-card,
+      .summary-card {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .status-value,
+      .summary-value {
+        font-size: 0.92rem;
+      }
+
+      .table-shell {
+        padding: 10px;
+        border-radius: 20px;
+      }
+
+      table {
+        min-width: 860px;
+      }
+
+      thead th,
+      tbody th,
+      td {
+        padding: 10px 8px;
+      }
+
+      thead th,
+      td {
+        font-size: 0.82rem;
       }
 
       tbody th {
-        font-size: 0.76rem;
-      }
-
-      .after {
         font-size: 0.78rem;
-        line-height: 1.3;
       }
 
-      .status-card {
-        padding: 12px 14px;
-        gap: 10px;
+      .time {
+        font-size: 0.68rem;
       }
 
-      .status-value {
-        font-size: 0.92rem;
+      .room-info {
+        font-size: 0.67rem;
+      }
+
+      .theme-toggle {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .status-card,
+      .summary-card {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>MirimTimeTable.html</h1>
-    <p class="subtitle">Made By 1203 Yul</p>
-
-    <div class="status-card">
-      <div class="status-item">
-        <span class="status-label">현재 시간</span>
-        <span class="status-value" id="currentTime">불러오는 중...</span>
+    <div class="hero">
+      <div class="hero-copy">
+        <h1>MirimTimeTable.html</h1>
+        <p class="subtitle">Made By 1203 Yul</p>
       </div>
-      <div class="status-item">
-        <span class="status-label">현재 진행</span>
-        <span class="status-value" id="currentPeriod">확인 중...</span>
+      <div class="controls">
+        <button class="theme-toggle" id="themeToggle" type="button">다크 모드</button>
       </div>
     </div>
 
-    <table>
-      <colgroup>
-        <col style="width: 18%;" />
-        <col style="width: 16.4%;" />
-        <col style="width: 16.4%;" />
-        <col style="width: 16.4%;" />
-        <col style="width: 16.4%;" />
-        <col style="width: 16.4%;" />
-      </colgroup>
-      <thead>
-        <tr>
-          <th>교시</th>
-          <th>월</th>
-          <th>화</th>
-          <th>수</th>
-          <th>목</th>
-          <th>금</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>조회<br /><span class="time">08:10 ~ 08:20</span></th>
-          <td class="homeroom" colspan="5">조회</td>
-        </tr>
-        <tr>
-          <th>1교시<br /><span class="time">08:20 ~ 09:10</span></th>
-          <td class="self">자치</td>
-          <td class="media">MC</td>
-          <td class="english">공통영어</td>
-          <td class="media">MC</td>
-          <td class="techhome">기술가정</td>
-        </tr>
-        <tr>
-          <th>2교시<br /><span class="time">09:20 ~ 10:10</span></th>
-          <td class="java">JAVA</td>
-          <td class="sports">체육</td>
-          <td class="korean">공통국어<br />(이대형)</td>
-          <td class="media">MC</td>
-          <td class="math">공통수학</td>
-        </tr>
-        <tr>
-          <th>3교시<br /><span class="time">10:20 ~ 11:10</span></th>
-          <td class="english">공통영어</td>
-          <td class="korean">공통국어</td>
-          <td class="math">공통수학</td>
-          <td class="techhome">기술가정</td>
-          <td class="history">한국사</td>
-        </tr>
-        <tr>
-          <th>4교시<br /><span class="time">11:20 ~ 12:10</span></th>
-          <td class="career">성직</td>
-          <td class="career">성직</td>
-          <td class="history">한국사</td>
-          <td class="japanese">일본어</td>
-          <td class="japanese">일본어</td>
-        </tr>
-        <tr>
-          <th>중식<br /><span class="time">12:10 ~ 13:00</span></th>
-          <td class="meal" colspan="5">중식</td>
-        </tr>
-        <tr>
-          <th>5교시<br /><span class="time">13:00 ~ 13:50</span></th>
-          <td class="history">한국사</td>
-          <td class="java">JAVA</td>
-          <td class="japanese">일본어</td>
-          <td class="korean">공통국어</td>
-          <td class="english">공통영어</td>
-        </tr>
-        <tr>
-          <th>6교시<br /><span class="time">14:00 ~ 14:50</span></th>
-          <td class="techhome">기술가정</td>
-          <td class="java">JAVA</td>
-          <td class="club">동아리</td>
-          <td class="java">JAVA</td>
-          <td class="sports">체육</td>
-        </tr>
-        <tr>
-          <th>7교시<br /><span class="time">15:00 ~ 15:50</span></th>
-          <td></td>
-          <td class="math">공통수학</td>
-          <td class="club">동아리</td>
-          <td class="java">JAVA</td>
-          <td></td>
-        </tr>
-        <tr>
-          <th>종례<br /><span class="time">15:50 ~ 16:00</span></th>
-          <td class="homeroom" colspan="5">종례</td>
-        </tr>
-        <tr>
-          <th>방과후 A<br /><span class="time">16:00 ~ 16:50</span></th>
-          <td></td>
-          <td class="after">방과후학교 A</td>
-          <td></td>
-          <td class="after">방과후학교 A</td>
-          <td></td>
-        </tr>
-        <tr>
-          <th>석식<br /><span class="time">16:50 ~ 17:50</span></th>
-          <td class="meal" colspan="5">석식</td>
-        </tr>
-        <tr>
-          <th>방과후 B<br /><span class="time">17:50 ~ 19:30</span></th>
-          <td></td>
-          <td class="after">방과후학교 B</td>
-          <td></td>
-          <td class="after">방과후학교 B</td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="top-grid">
+      <div class="status-card">
+        <div class="status-item">
+          <span class="status-label">현재 시간</span>
+          <span class="status-value" id="currentTime">불러오는 중...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">현재 진행</span>
+          <span class="status-value" id="currentPeriod">확인 중...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">남은 시간</span>
+          <span class="status-value" id="remainingTime">계산 중...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">현재 교실</span>
+          <span class="status-value" id="currentRoom">확인 중...</span>
+        </div>
+      </div>
+    </div>
 
+    <div class="table-shell">
+      <table>
+        <colgroup>
+          <col class="time-col" />
+          <col class="day-col" />
+          <col class="day-col" />
+          <col class="day-col" />
+          <col class="day-col" />
+          <col class="day-col" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>교시</th>
+            <th data-day="1">월</th>
+            <th data-day="2">화</th>
+            <th data-day="3">수</th>
+            <th data-day="4">목</th>
+            <th data-day="5">금</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-period="조회">
+            <th>조회<br /><span class="time">08:10 ~ 08:20</span></th>
+            <td class="homeroom" colspan="5">조회</td>
+          </tr>
+          <tr data-period="1교시">
+            <th>1교시<br /><span class="time">08:20 ~ 09:10</span></th>
+            <td data-subject="자치"><div class="subject"><span class="subject-name">자치</span></div></td>
+            <td data-subject="MC"><div class="subject"><span class="subject-name">MC</span></div></td>
+            <td data-subject="공통영어"><div class="subject"><span class="subject-name">공통영어</span></div></td>
+            <td data-subject="MC"><div class="subject"><span class="subject-name">MC</span></div></td>
+            <td data-subject="기술가정"><div class="subject"><span class="subject-name">기술가정</span></div></td>
+          </tr>
+          <tr data-period="2교시">
+            <th>2교시<br /><span class="time">09:20 ~ 10:10</span></th>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td data-subject="체육"><div class="subject"><span class="subject-name">체육</span></div></td>
+            <td data-subject="공통국어 (이대형)"><div class="subject"><span class="subject-name">공통국어<br />(이대형)</span></div></td>
+            <td data-subject="MC"><div class="subject"><span class="subject-name">MC</span></div></td>
+            <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
+          </tr>
+          <tr data-period="3교시">
+            <th>3교시<br /><span class="time">10:20 ~ 11:10</span></th>
+            <td data-subject="공통영어"><div class="subject"><span class="subject-name">공통영어</span></div></td>
+            <td data-subject="공통국어"><div class="subject"><span class="subject-name">공통국어</span></div></td>
+            <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
+            <td data-subject="기술가정"><div class="subject"><span class="subject-name">기술가정</span></div></td>
+            <td data-subject="한국사"><div class="subject"><span class="subject-name">한국사</span></div></td>
+          </tr>
+          <tr data-period="4교시">
+            <th>4교시<br /><span class="time">11:20 ~ 12:10</span></th>
+            <td data-subject="성직"><div class="subject"><span class="subject-name">성직</span></div></td>
+            <td data-subject="성직"><div class="subject"><span class="subject-name">성직</span></div></td>
+            <td data-subject="한국사"><div class="subject"><span class="subject-name">한국사</span></div></td>
+            <td data-subject="일본어"><div class="subject"><span class="subject-name">일본어</span></div></td>
+            <td data-subject="일본어"><div class="subject"><span class="subject-name">일본어</span></div></td>
+          </tr>
+          <tr data-period="중식">
+            <th>중식<br /><span class="time">12:10 ~ 13:00</span></th>
+            <td class="meal" colspan="5">중식</td>
+          </tr>
+          <tr data-period="5교시">
+            <th>5교시<br /><span class="time">13:00 ~ 13:50</span></th>
+            <td data-subject="한국사"><div class="subject"><span class="subject-name">한국사</span></div></td>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td data-subject="일본어"><div class="subject"><span class="subject-name">일본어</span></div></td>
+            <td data-subject="공통국어"><div class="subject"><span class="subject-name">공통국어</span></div></td>
+            <td data-subject="공통영어"><div class="subject"><span class="subject-name">공통영어</span></div></td>
+          </tr>
+          <tr data-period="6교시">
+            <th>6교시<br /><span class="time">14:00 ~ 14:50</span></th>
+            <td data-subject="기술가정"><div class="subject"><span class="subject-name">기술가정</span></div></td>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td data-subject="동아리"><div class="subject"><span class="subject-name">동아리</span></div></td>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td data-subject="체육"><div class="subject"><span class="subject-name">체육</span></div></td>
+          </tr>
+          <tr data-period="7교시">
+            <th>7교시<br /><span class="time">15:00 ~ 15:50</span></th>
+            <td class="empty-cell"></td>
+            <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
+            <td data-subject="동아리"><div class="subject"><span class="subject-name">동아리</span></div></td>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td class="empty-cell"></td>
+          </tr>
+          <tr data-period="종례">
+            <th>종례<br /><span class="time">15:50 ~ 16:00</span></th>
+            <td class="homeroom" colspan="5">종례</td>
+          </tr>
+          <tr data-period="방과후 A">
+            <th>방과후 A<br /><span class="time">16:00 ~ 16:50</span></th>
+            <td class="empty-cell"></td>
+            <td data-subject="방과후학교 A"><div class="subject"><span class="subject-name">방과후학교 A</span></div></td>
+            <td class="empty-cell"></td>
+            <td data-subject="방과후학교 A"><div class="subject"><span class="subject-name">방과후학교 A</span></div></td>
+            <td class="empty-cell"></td>
+          </tr>
+          <tr data-period="석식">
+            <th>석식<br /><span class="time">16:50 ~ 17:50</span></th>
+            <td class="meal" colspan="5">석식</td>
+          </tr>
+          <tr data-period="방과후 B">
+            <th>방과후 B<br /><span class="time">17:50 ~ 19:30</span></th>
+            <td class="empty-cell"></td>
+            <td data-subject="방과후학교 B"><div class="subject"><span class="subject-name">방과후학교 B</span></div></td>
+            <td class="empty-cell"></td>
+            <td data-subject="방과후학교 B"><div class="subject"><span class="subject-name">방과후학교 B</span></div></td>
+            <td class="empty-cell"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+
   <script>
+    const classroomMap = {
+      "MC": "4층 제1디자인실습실",
+      "JAVA": "3층 제4소프트웨어랩",
+      "방과후학교 A": "3층 제4소프트웨어랩",
+      "방과후학교 B": "4층 1-2",
+      "공통국어 (이대형)": "2층 AICE랩실",
+      "공통국어": "4층 1-2",
+      "공통영어": "4층 1-2",
+      "공통수학": "4층 1-2",
+      "한국사": "4층 1-2",
+      "성직": "4층 1-2",
+      "기술가정": "4층 1-2",
+      "일본어": "4층 1-2",
+      "자치": "4층 1-2",
+      "동아리": "도서관",
+      "체육": "체육관"
+    };
+
     const scheduleRanges = [
-      { name: "조회", start: "08:10", end: "08:20" },
+      { name: "조회", start: "08:10", end: "08:20", merged: true },
       { name: "1교시", start: "08:20", end: "09:10" },
       { name: "2교시", start: "09:20", end: "10:10" },
       { name: "3교시", start: "10:20", end: "11:10" },
       { name: "4교시", start: "11:20", end: "12:10" },
-      { name: "중식", start: "12:10", end: "13:00" },
+      { name: "중식", start: "12:10", end: "13:00", merged: true },
       { name: "5교시", start: "13:00", end: "13:50" },
       { name: "6교시", start: "14:00", end: "14:50" },
       { name: "7교시", start: "15:00", end: "15:50" },
-      { name: "종례", start: "15:50", end: "16:00" },
+      { name: "종례", start: "15:50", end: "16:00", merged: true },
       { name: "방과후 A", start: "16:00", end: "16:50" },
-      { name: "석식", start: "16:50", end: "17:50" },
+      { name: "석식", start: "16:50", end: "17:50", merged: true },
       { name: "방과후 B", start: "17:50", end: "19:30" }
     ];
+
+    const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+    const themeToggle = document.getElementById("themeToggle");
 
     function toMinutes(timeText) {
       const [hour, minute] = timeText.split(":").map(Number);
       return hour * 60 + minute;
     }
 
+    function formatRemainingTime(diffMinutes) {
+      if (diffMinutes <= 0) return "곧 종료";
+      const hours = Math.floor(diffMinutes / 60);
+      const minutes = diffMinutes % 60;
+      if (hours > 0 && minutes > 0) return `${hours}시간 ${minutes}분 남음`;
+      if (hours > 0) return `${hours}시간 남음`;
+      return `${minutes}분 남음`;
+    }
+
     function getCurrentSchedule(minutesNow) {
       for (const item of scheduleRanges) {
         const start = toMinutes(item.start);
         const end = toMinutes(item.end);
-
         if (minutesNow >= start && minutesNow < end) {
-          return `${item.name} (${item.start} ~ ${item.end})`;
+          return item;
         }
       }
+      return null;
+    }
 
-      return "수업 시간 아님";
+    function applyRoomBadges() {
+      const cells = document.querySelectorAll("td[data-subject]");
+      cells.forEach((cell) => {
+        const subject = cell.dataset.subject;
+        const subjectWrap = cell.querySelector(".subject");
+        if (!subjectWrap) return;
+
+        const existing = subjectWrap.querySelector(".room-info");
+        if (existing) existing.remove();
+
+        const room = classroomMap[subject];
+        if (room) {
+          const roomTag = document.createElement("span");
+          roomTag.className = "room-info";
+          roomTag.textContent = `교실: ${room}`;
+          subjectWrap.appendChild(roomTag);
+        }
+      });
+    }
+
+    function updateThemeButton() {
+      const isDark = document.body.classList.contains("dark-mode");
+      themeToggle.textContent = isDark ? "라이트 모드" : "다크 모드";
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem("mirim-theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+      }
+      updateThemeButton();
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll("tbody tr").forEach((row) => row.classList.remove("today-row", "current-row"));
+      document.querySelectorAll("tbody td").forEach((cell) => cell.classList.remove("today-cell", "current-cell"));
+      document.querySelectorAll("thead th").forEach((cell) => cell.classList.remove("today-column-header", "current-day-column-header"));
+    }
+
+    function updateHighlights(currentSchedule, dayOfWeek) {
+      clearHighlights();
+
+      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+        const headerCell = document.querySelector(`thead th[data-day="${dayOfWeek}"]`);
+        if (headerCell) {
+          headerCell.classList.add("today-column-header", "current-day-column-header");
+        }
+
+        document.querySelectorAll("tbody tr").forEach((row) => {
+          const cells = row.querySelectorAll("td");
+          if (cells.length === 5) {
+            const targetCell = cells[dayOfWeek - 1];
+            if (targetCell) targetCell.classList.add("today-cell");
+          }
+        });
+      }
+
+      if (currentSchedule) {
+        const currentRow = document.querySelector(`tbody tr[data-period="${currentSchedule.name}"]`);
+        if (currentRow) {
+          currentRow.classList.add("current-row");
+          const cells = currentRow.querySelectorAll("td");
+          if (cells.length === 5 && dayOfWeek >= 1 && dayOfWeek <= 5) {
+            const currentCell = cells[dayOfWeek - 1];
+            if (currentCell) currentCell.classList.add("current-cell");
+          }
+        }
+      }
+    }
+
+    function getCurrentSubjectAndRoom(currentSchedule, dayOfWeek) {
+      if (!currentSchedule) {
+        return { subject: "수업 시간 아님", room: "미지정" };
+      }
+
+      if (currentSchedule.merged) {
+        return { subject: currentSchedule.name, room: "공통 일정" };
+      }
+
+      if (!(dayOfWeek >= 1 && dayOfWeek <= 5)) {
+        return { subject: currentSchedule.name, room: "주말" };
+      }
+
+      const currentRow = document.querySelector(`tbody tr[data-period="${currentSchedule.name}"]`);
+      if (!currentRow) {
+        return { subject: currentSchedule.name, room: "미지정" };
+      }
+
+      const cells = currentRow.querySelectorAll("td");
+      if (cells.length !== 5) {
+        return { subject: currentSchedule.name, room: "미지정" };
+      }
+
+      const currentCell = cells[dayOfWeek - 1];
+      const subject = currentCell?.dataset.subject || "";
+      if (!subject) {
+        return { subject: `${currentSchedule.name} · 없음`, room: "해당 수업 없음" };
+      }
+
+      return {
+        subject,
+        room: classroomMap[subject] ? `교실: ${classroomMap[subject]}` : "미지정"
+      };
     }
 
     function updateCurrentStatus() {
@@ -383,19 +761,60 @@
       const minutes = String(now.getMinutes()).padStart(2, "0");
       const seconds = String(now.getSeconds()).padStart(2, "0");
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const dayOfWeek = now.getDay();
 
+      const currentSchedule = getCurrentSchedule(currentMinutes);
       const currentTimeEl = document.getElementById("currentTime");
       const currentPeriodEl = document.getElementById("currentPeriod");
+      const remainingTimeEl = document.getElementById("remainingTime");
+      const currentRoomEl = document.getElementById("currentRoom");
+      const todayLabelEl = document.getElementById("todayLabel");
 
       if (currentTimeEl) {
         currentTimeEl.textContent = `${hours}:${minutes}:${seconds}`;
       }
 
-      if (currentPeriodEl) {
-        currentPeriodEl.textContent = getCurrentSchedule(currentMinutes);
+      if (todayLabelEl) {
+        todayLabelEl.textContent = `${dayNames[dayOfWeek]}요일`;
       }
+
+      if (currentSchedule) {
+        const remaining = toMinutes(currentSchedule.end) - currentMinutes;
+        const { subject, room } = getCurrentSubjectAndRoom(currentSchedule, dayOfWeek);
+
+        if (currentPeriodEl) {
+          if (currentSchedule.merged) {
+            currentPeriodEl.textContent = `${currentSchedule.name} (${currentSchedule.start} ~ ${currentSchedule.end})`;
+          } else {
+            currentPeriodEl.textContent = `${currentSchedule.name} · ${subject}`;
+          }
+        }
+
+        if (remainingTimeEl) {
+          remainingTimeEl.textContent = formatRemainingTime(remaining);
+        }
+
+        if (currentRoomEl) {
+          currentRoomEl.textContent = room;
+        }
+      } else {
+        if (currentPeriodEl) currentPeriodEl.textContent = "수업 시간 아님";
+        if (remainingTimeEl) remainingTimeEl.textContent = "다음 일정 대기";
+        if (currentRoomEl) currentRoomEl.textContent = dayOfWeek === 0 || dayOfWeek === 6 ? "주말" : "미지정";
+      }
+
+      updateHighlights(currentSchedule, dayOfWeek);
     }
 
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
+      localStorage.setItem("mirim-theme", isDark ? "dark" : "light");
+      updateThemeButton();
+    });
+
+    initTheme();
+    applyRoomBadges();
     updateCurrentStatus();
     setInterval(updateCurrentStatus, 1000);
   </script>
