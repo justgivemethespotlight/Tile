@@ -302,7 +302,8 @@
       letter-spacing: -0.02em;
     }
 
-    .room-info {
+    .room-info,
+    .teacher-info {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -423,7 +424,8 @@
         font-size: 0.68rem;
       }
 
-      .room-info {
+      .room-info,
+      .teacher-info {
         font-size: 0.67rem;
       }
 
@@ -510,7 +512,7 @@
             <th>2교시<br /><span class="time">09:20 ~ 10:10</span></th>
             <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
             <td data-subject="체육"><div class="subject"><span class="subject-name">체육</span></div></td>
-            <td data-subject="공통국어 (이대형)"><div class="subject"><span class="subject-name">공통국어<br />(이대형)</span></div></td>
+            <td data-subject="공통국어 (이대형)"><div class="subject"><span class="subject-name">공통국어</span></div></td>
             <td data-subject="MC"><div class="subject"><span class="subject-name">MC</span></div></td>
             <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
           </tr>
@@ -589,21 +591,38 @@
 
   <script>
     const classroomMap = {
-      "MC": "4층 제1디자인실습실",
-      "JAVA": "3층 제4소프트웨어랩",
-      "방과후학교 A": "3층 제4소프트웨어랩",
-      "방과후학교 B": "4층 1-2",
-      "공통국어 (이대형)": "2층 AICE랩실",
-      "공통국어": "4층 1-2",
-      "공통영어": "4층 1-2",
-      "공통수학": "4층 1-2",
-      "한국사": "4층 1-2",
-      "성직": "4층 1-2",
-      "기술가정": "4층 1-2",
-      "일본어": "4층 1-2",
-      "자치": "4층 1-2",
+      "MC": "제1디자인실습실",
+      "JAVA": "제4소프트웨어랩",
+      "방과후학교 A": "제4소프트웨어랩",
+      "방과후학교 B": "1-2",
+      "공통국어 (이대형)": "AICE랩실",
+      "공통국어": "1-2",
+      "공통영어": "1-2",
+      "공통수학": "1-2",
+      "한국사": "1-2",
+      "성직": "1-2",
+      "기술가정": "1-2",
+      "일본어": "1-2",
+      "자치": "1-2",
       "동아리": "도서관",
       "체육": "체육관"
+    };
+
+    const teacherMap = {
+      "자치": "김지훈",
+      "JAVA": "민주리 / 김윤지 / 유병석",
+      "공통영어": "김지훈",
+      "성직": "이정임",
+      "한국사": "이철호",
+      "기술가정": "김보경",
+      "MC": "정하나",
+      "체육": "김신",
+      "공통국어": "손명수",
+      "공통국어 (이대형)": "이대형",
+      "공통수학": "신혜영 / 이호연",
+      "일본어": "김윤환",
+      "방과후학교 A": "박성래 / 김영철 / 함기훈 / 유병석",
+      "방과후학교 B": "박은경 / 최인녀 / 박혜영 / 김영미"
     };
 
     const scheduleRanges = [
@@ -657,8 +676,11 @@
         const subjectWrap = cell.querySelector(".subject");
         if (!subjectWrap) return;
 
-        const existing = subjectWrap.querySelector(".room-info");
-        if (existing) existing.remove();
+        const existingRoom = subjectWrap.querySelector(".room-info");
+        if (existingRoom) existingRoom.remove();
+
+        const existingTeacher = subjectWrap.querySelector(".teacher-info");
+        if (existingTeacher) existingTeacher.remove();
 
         const room = classroomMap[subject];
         if (room) {
@@ -666,6 +688,14 @@
           roomTag.className = "room-info";
           roomTag.textContent = `교실: ${room}`;
           subjectWrap.appendChild(roomTag);
+        }
+
+        const teacher = teacherMap[subject];
+        if (teacher) {
+          const teacherTag = document.createElement("span");
+          teacherTag.className = "teacher-info";
+          teacherTag.textContent = `선생님: ${teacher}`;
+          subjectWrap.appendChild(teacherTag);
         }
       });
     }
