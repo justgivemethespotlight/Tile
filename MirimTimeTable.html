@@ -24,27 +24,29 @@
       --current: rgba(16, 185, 129, 0.12);
       --current-border: rgba(16, 185, 129, 0.34);
       --current-bar: rgba(255, 59, 48, 0.9);
+      --period-progress: 0%;
       --toggle-bg: rgba(17, 24, 39, 0.06);
     }
 
     body.dark-mode {
       color-scheme: dark;
-      --bg: #0f1115;
-      --bg-grad-top: #191d24;
-      --surface: rgba(19, 23, 31, 0.84);
-      --surface-strong: rgba(19, 23, 31, 0.94);
-      --surface-soft: rgba(26, 31, 41, 0.94);
+      --bg: #000000;
+      --bg-grad-top: #000000;
+      --surface: rgba(10, 10, 10, 0.84);
+      --surface-strong: rgba(10, 10, 10, 0.94);
+      --surface-soft: rgba(18, 18, 18, 0.94);
       --text: #f3f4f6;
       --text-soft: #9ca3af;
       --border: rgba(255, 255, 255, 0.08);
-      --shadow: 0 22px 54px rgba(0, 0, 0, 0.35);
-      --header: rgba(26, 31, 41, 0.94);
+      --shadow: 0 22px 54px rgba(0, 0, 0, 0.45);
+      --header: rgba(18, 18, 18, 0.94);
       --accent: #f9fafb;
       --accent-soft: rgba(255, 255, 255, 0.07);
       --today: rgba(96, 165, 250, 0.14);
       --current: rgba(16, 185, 129, 0.16);
       --current-border: rgba(52, 211, 153, 0.45);
       --current-bar: rgba(255, 69, 58, 0.95);
+      --period-progress: 0%;
       --toggle-bg: rgba(255, 255, 255, 0.08);
     }
 
@@ -345,10 +347,9 @@
       position: absolute;
       left: -1px;
       right: -1px;
-      top: 10px;
+      top: calc((100% - 3px) * var(--period-progress) / 100);
       height: 3px;
       background: var(--current-bar);
-      box-shadow: 0 0 0 1px color-mix(in srgb, var(--current-bar) 18%, transparent);
       z-index: 3;
       pointer-events: none;
     }
@@ -359,26 +360,91 @@
       border-bottom-left-radius: 999px;
     }
 
-    tbody tr.current-row > td:last-child::after {
+    tbody tr.current-row > td:last-of-type::after {
       right: 12px;
       border-top-right-radius: 999px;
       border-bottom-right-radius: 999px;
     }
 
-    tbody tr.current-row > td.current-cell::before {
+    tbody tr.current-row > th {
+      overflow: visible;
+    }
+
+    tbody tr.current-row > th .time-marker {
+      position: absolute;
+      left: 8px;
+      top: calc((100% - 20px) * var(--period-progress) / 100);
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--current-bar);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1;
+      z-index: 5;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    }
+
+    tbody tr.break-target-row > td {
+      background: var(--current);
+      box-shadow: inset 0 0 0 1px var(--current-border);
+    }
+
+    tbody tr.break-target-row > td::after {
       content: "";
       position: absolute;
-      top: 4px;
-      left: 50%;
-      width: 12px;
-      height: 12px;
-      transform: translateX(-50%);
-      border-radius: 50%;
+      left: -1px;
+      right: -1px;
+      top: 0;
+      height: 3px;
       background: var(--current-bar);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--current-bar) 20%, transparent);
-      z-index: 4;
+      z-index: 3;
       pointer-events: none;
     }
+
+    tbody tr.break-target-row > td:first-of-type::after {
+      left: 12px;
+      border-top-left-radius: 999px;
+      border-bottom-left-radius: 999px;
+    }
+
+    tbody tr.break-target-row > td:last-of-type::after {
+      right: 12px;
+      border-top-right-radius: 999px;
+      border-bottom-right-radius: 999px;
+    }
+
+    tbody tr.break-target-row > th {
+      overflow: visible;
+    }
+
+    tbody tr.break-target-row > th .time-marker {
+      position: absolute;
+      left: 8px;
+      top: 0;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--current-bar);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1;
+      z-index: 5;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    }
+
 
     thead th.today-column-header {
       background: var(--today);
@@ -401,7 +467,6 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
-
     @media (max-width: 768px) {
       body {
         padding: 16px 10px;
@@ -475,14 +540,22 @@
 
       tbody tr.current-row > th::after,
       tbody tr.current-row > td::after {
-        top: 8px;
+        top: calc((100% - 3px) * var(--period-progress) / 100);
         height: 3px;
       }
 
-      tbody tr.current-row > td.current-cell::before {
-        top: 3px;
-        width: 10px;
-        height: 10px;
+      tbody tr.current-row > th .time-marker {
+        left: 6px;
+        min-width: 36px;
+        padding: 2px 6px;
+        font-size: 0.66rem;
+      }
+
+      tbody tr.break-target-row > th .time-marker {
+        left: 6px;
+        min-width: 36px;
+        padding: 2px 6px;
+        font-size: 0.66rem;
       }
 
       .theme-toggle {
@@ -701,8 +774,17 @@
       { name: "방과후 B", start: "18:20", end: "20:00" }
     ];
 
+    const breakRanges = [
+      { name: "쉬는시간", start: "09:10", end: "09:20" },
+      { name: "쉬는시간", start: "10:10", end: "10:20" },
+      { name: "쉬는시간", start: "11:10", end: "11:20" },
+      { name: "쉬는시간", start: "13:50", end: "14:00" },
+      { name: "쉬는시간", start: "14:50", end: "15:00" }
+    ];
+
     const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
     const themeToggle = document.getElementById("themeToggle");
+    const currentTimeEl = document.getElementById("currentTime");
 
     function toMinutes(timeText) {
       const [hour, minute] = timeText.split(":").map(Number);
@@ -720,8 +802,11 @@
 
     function formatRemainingTime(diffMinutes) {
       if (diffMinutes <= 0) return "곧 종료";
-      const hours = Math.floor(diffMinutes / 60);
-      const minutes = diffMinutes % 60;
+
+      const totalMinutes = Math.ceil(diffMinutes);
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+
       if (hours > 0 && minutes > 0) return `${hours}시간 ${minutes}분 남음`;
       if (hours > 0) return `${hours}시간 남음`;
       return `${minutes}분 남음`;
@@ -732,7 +817,40 @@
         const start = toMinutes(item.start);
         const end = toMinutes(item.end);
         if (minutesNow >= start && minutesNow < end) {
-          return item;
+          return { ...item, type: "schedule" };
+        }
+      }
+
+      for (const item of breakRanges) {
+        const start = toMinutes(item.start);
+        const end = toMinutes(item.end);
+        if (minutesNow >= start && minutesNow < end) {
+          return { ...item, type: "break" };
+        }
+      }
+
+      return null;
+    }
+
+    function getScheduleProgress(scheduleItem, minutesNow) {
+      const start = toMinutes(scheduleItem.start);
+      const end = toMinutes(scheduleItem.end);
+      const duration = end - start;
+
+      if (duration <= 1) return 0;
+
+      const remainingWholeMinutes = Math.max(1, Math.min(duration, Math.ceil(end - minutesNow)));
+      const passedMinuteSteps = duration - remainingWholeMinutes;
+      const progress = (passedMinuteSteps / (duration - 1)) * 100;
+
+      return Math.max(0, Math.min(100, progress));
+    }
+
+    function getNextScheduleAfter(minutesNow) {
+      for (const item of scheduleRanges) {
+        const start = toMinutes(item.start);
+        if (minutesNow < start) {
+          return { ...item, type: "schedule" };
         }
       }
       return null;
@@ -741,6 +859,16 @@
     function getDayScheduleEnd(dayOfWeek) {
       if (!(dayOfWeek >= 1 && dayOfWeek <= 5)) {
         return null;
+      }
+
+      const forcedDayEndMap = {
+        1: "16:30",
+        3: "16:30",
+        5: "16:30"
+      };
+
+      if (forcedDayEndMap[dayOfWeek]) {
+        return forcedDayEndMap[dayOfWeek];
       }
 
       const headerCells = document.querySelectorAll("thead th[data-day]");
@@ -824,12 +952,13 @@
     }
 
     function clearHighlights() {
-      document.querySelectorAll("tbody tr").forEach((row) => row.classList.remove("today-row", "current-row"));
+      document.querySelectorAll("tbody tr").forEach((row) => row.classList.remove("today-row", "current-row", "break-target-row"));
       document.querySelectorAll("tbody td").forEach((cell) => cell.classList.remove("today-cell", "current-cell"));
       document.querySelectorAll("thead th").forEach((cell) => cell.classList.remove("today-column-header", "current-day-column-header"));
+      document.querySelectorAll(".time-marker").forEach((marker) => marker.remove());
     }
 
-    function updateHighlights(currentSchedule, dayOfWeek) {
+    function updateHighlights(currentSchedule, dayOfWeek, highlightSchedule) {
       clearHighlights();
 
       if (dayOfWeek >= 1 && dayOfWeek <= 5) {
@@ -847,14 +976,26 @@
         });
       }
 
-      if (currentSchedule) {
-        const currentRow = document.querySelector(`tbody tr[data-period="${currentSchedule.name}"]`);
+      if (highlightSchedule && highlightSchedule.type === "schedule") {
+        const currentRow = document.querySelector(`tbody tr[data-period="${highlightSchedule.name}"]`);
         if (currentRow) {
-          currentRow.classList.add("current-row");
+          const isBreakTarget = currentSchedule?.type === "break";
+          currentRow.classList.add(isBreakTarget ? "break-target-row" : "current-row");
+
+          const rowHeader = currentRow.querySelector("th");
+          if (rowHeader && currentTimeEl) {
+            const marker = document.createElement("span");
+            marker.className = "time-marker";
+            marker.textContent = currentTimeEl.textContent;
+            rowHeader.appendChild(marker);
+          }
+
           const cells = currentRow.querySelectorAll("td");
           if (cells.length === 5 && dayOfWeek >= 1 && dayOfWeek <= 5) {
             const currentCell = cells[dayOfWeek - 1];
-            if (currentCell) currentCell.classList.add("current-cell");
+            if (currentCell) {
+              currentCell.classList.add("current-cell");
+            }
           }
         }
       }
@@ -863,6 +1004,10 @@
     function getCurrentSubjectAndRoom(currentSchedule, dayOfWeek) {
       if (!currentSchedule) {
         return { subject: "일과 시간 아님", room: "미지정" };
+      }
+
+      if (currentSchedule.type === "break") {
+        return { subject: "쉬는시간", room: "이동 시간" };
       }
 
       if (currentSchedule.merged) {
@@ -886,7 +1031,7 @@
       const currentCell = cells[dayOfWeek - 1];
       const subject = currentCell?.dataset.subject || "";
       if (!subject) {
-        return { subject: `${currentSchedule.name} · 없음`, room: "해당 수업 없음" };
+        return { subject: "", room: "일과 시간 아님" };
       }
 
       return {
@@ -900,11 +1045,16 @@
       const hours = String(now.getHours()).padStart(2, "0");
       const minutes = String(now.getMinutes()).padStart(2, "0");
       const seconds = String(now.getSeconds()).padStart(2, "0");
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
       const dayOfWeek = now.getDay();
 
       const currentSchedule = getCurrentSchedule(currentMinutes);
-      const currentTimeEl = document.getElementById("currentTime");
+      const highlightSchedule = currentSchedule?.type === "break"
+        ? getNextScheduleAfter(currentMinutes)
+        : currentSchedule;
+      const currentProgress = currentSchedule
+        ? (currentSchedule.type === "break" ? 0 : getScheduleProgress(currentSchedule, currentMinutes))
+        : 0;
       const currentPeriodEl = document.getElementById("currentPeriod");
       const remainingTimeEl = document.getElementById("remainingTime");
       const dayRemainingTimeEl = document.getElementById("dayRemainingTime");
@@ -936,15 +1086,21 @@
         const { subject, room } = getCurrentSubjectAndRoom(currentSchedule, dayOfWeek);
 
         if (currentPeriodEl) {
-          if (currentSchedule.merged) {
+          if (currentSchedule.type === "break") {
             currentPeriodEl.textContent = `${currentSchedule.name} (${format12Hour(currentSchedule.start)} ~ ${format12Hour(currentSchedule.end)})`;
+          } else if (currentSchedule.merged) {
+            currentPeriodEl.textContent = `${currentSchedule.name} (${format12Hour(currentSchedule.start)} ~ ${format12Hour(currentSchedule.end)})`;
+          } else if (!subject) {
+            currentPeriodEl.textContent = "일과 시간 아님";
           } else {
             currentPeriodEl.textContent = `${currentSchedule.name} · ${subject}`;
           }
         }
 
         if (remainingTimeEl) {
-          remainingTimeEl.textContent = formatRemainingTime(remaining);
+          remainingTimeEl.textContent = !subject && currentSchedule.type === "schedule"
+            ? "일과 시간 아님"
+            : formatRemainingTime(remaining);
         }
 
         if (currentRoomEl) {
@@ -956,7 +1112,8 @@
         if (currentRoomEl) currentRoomEl.textContent = dayOfWeek === 0 || dayOfWeek === 6 ? "주말" : "미지정";
       }
 
-      updateHighlights(currentSchedule, dayOfWeek);
+      updateHighlights(currentSchedule, dayOfWeek, highlightSchedule);
+      document.documentElement.style.setProperty("--period-progress", `${currentProgress}`);
     }
 
     themeToggle.addEventListener("click", () => {
