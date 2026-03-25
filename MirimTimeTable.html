@@ -53,6 +53,9 @@
     * {
       box-sizing: border-box;
     }
+    .iphone-safe-zone {
+      display: none;
+    }
 
     body {
       margin: 0;
@@ -63,6 +66,9 @@
       color: var(--text);
       padding: 32px 16px;
       transition: background 0.28s ease, color 0.28s ease;
+    }
+    body.has-iphone-safe-zone {
+      padding-top: 32px;
     }
 
     .container {
@@ -513,6 +519,22 @@
         padding: 16px 10px;
       }
 
+      .iphone-safe-zone {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: calc(env(safe-area-inset-top, 0px) + 16px);
+        background: #ffffff;
+        z-index: 9999;
+        pointer-events: none;
+      }
+
+      body.has-iphone-safe-zone {
+        padding-top: calc(env(safe-area-inset-top, 0px) + 28px);
+      }
+
       .container {
         padding: 18px;
         border-radius: 22px;
@@ -619,6 +641,7 @@
   </style>
 </head>
 <body>
+  <div class="iphone-safe-zone" aria-hidden="true"></div>
   <div class="container">
     <div class="hero">
       <div class="hero-copy">
@@ -832,6 +855,10 @@
     const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
     const themeToggle = document.getElementById("themeToggle");
     const currentTimeEl = document.getElementById("currentTime");
+    function updateIPhoneSafeZone() {
+      const isIPhone = /iPhone/i.test(navigator.userAgent);
+      document.body.classList.toggle("has-iphone-safe-zone", isIPhone);
+    }
 
     function toMinutes(timeText) {
       const [hour, minute] = timeText.split(":").map(Number);
@@ -1201,6 +1228,7 @@
       updateThemeButton();
     });
 
+    updateIPhoneSafeZone();
     initTheme();
     applyRoomBadges();
     updateCurrentStatus();
