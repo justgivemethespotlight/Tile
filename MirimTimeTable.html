@@ -149,7 +149,7 @@
 
     .status-card {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -334,7 +334,7 @@
     }
 
     tbody tr.current-row > th,
-    tbody tr.current-row > td.current-cell {
+    tbody tr.current-row > td {
       background: var(--current);
       box-shadow: inset 0 0 0 1px var(--current-border);
     }
@@ -346,9 +346,10 @@
       left: -1px;
       right: -1px;
       top: 10px;
-      height: 2px;
+      height: 3px;
       background: var(--current-bar);
-      z-index: 1;
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--current-bar) 18%, transparent);
+      z-index: 3;
       pointer-events: none;
     }
 
@@ -367,15 +368,15 @@
     tbody tr.current-row > td.current-cell::before {
       content: "";
       position: absolute;
-      top: 6px;
+      top: 4px;
       left: 50%;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       transform: translateX(-50%);
       border-radius: 50%;
       background: var(--current-bar);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--current-bar) 18%, transparent);
-      z-index: 2;
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--current-bar) 20%, transparent);
+      z-index: 4;
       pointer-events: none;
     }
 
@@ -475,12 +476,13 @@
       tbody tr.current-row > th::after,
       tbody tr.current-row > td::after {
         top: 8px;
+        height: 3px;
       }
 
       tbody tr.current-row > td.current-cell::before {
-        top: 5px;
-        width: 8px;
-        height: 8px;
+        top: 3px;
+        width: 10px;
+        height: 10px;
       }
 
       .theme-toggle {
@@ -519,8 +521,12 @@
           <span class="status-value" id="currentPeriod">확인 중...</span>
         </div>
         <div class="status-item">
-          <span class="status-label">남은 시간</span>
+          <span class="status-label">교시 남은 시간</span>
           <span class="status-value" id="remainingTime">계산 중...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">일과 전체 남은 시간</span>
+          <span class="status-value" id="dayRemainingTime">계산 중...</span>
         </div>
         <div class="status-item">
           <span class="status-label">현재 교실</span>
@@ -732,6 +738,47 @@
       return null;
     }
 
+    function getDayScheduleEnd(dayOfWeek) {
+      if (!(dayOfWeek >= 1 && dayOfWeek <= 5)) {
+        return null;
+      }
+
+      const headerCells = document.querySelectorAll("thead th[data-day]");
+      const tableDayIndex = Array.from(headerCells).findIndex(
+        (cell) => Number(cell.dataset.day) === dayOfWeek
+      );
+
+      if (tableDayIndex === -1) {
+        return null;
+      }
+
+      let latestEnd = null;
+
+      document.querySelectorAll("tbody tr[data-period]").forEach((row) => {
+        const periodName = row.dataset.period;
+        const scheduleItem = scheduleRanges.find((item) => item.name === periodName);
+        if (!scheduleItem) return;
+
+        const cells = row.querySelectorAll("td");
+        if (cells.length === 1 && cells[0].hasAttribute("colspan")) {
+          latestEnd = scheduleItem.end;
+          return;
+        }
+
+        if (cells.length === 5) {
+          const targetCell = cells[tableDayIndex];
+          if (!targetCell) return;
+
+          const hasSubject = Boolean(targetCell.dataset.subject);
+          if (hasSubject) {
+            latestEnd = scheduleItem.end;
+          }
+        }
+      });
+
+      return latestEnd;
+    }
+
     function applyRoomBadges() {
       const cells = document.querySelectorAll("td[data-subject]");
       cells.forEach((cell) => {
@@ -860,6 +907,7 @@
       const currentTimeEl = document.getElementById("currentTime");
       const currentPeriodEl = document.getElementById("currentPeriod");
       const remainingTimeEl = document.getElementById("remainingTime");
+      const dayRemainingTimeEl = document.getElementById("dayRemainingTime");
       const currentRoomEl = document.getElementById("currentRoom");
       const todayLabelEl = document.getElementById("todayLabel");
 
@@ -869,6 +917,18 @@
 
       if (todayLabelEl) {
         todayLabelEl.textContent = `${dayNames[dayOfWeek]}요일`;
+      }
+
+      const isSchoolWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+      const dayScheduleEnd = getDayScheduleEnd(dayOfWeek);
+      const dayScheduleEndMinutes = dayScheduleEnd ? toMinutes(dayScheduleEnd) : null;
+
+      if (dayRemainingTimeEl) {
+        if (isSchoolWeekday && dayScheduleEndMinutes !== null && currentMinutes < dayScheduleEndMinutes) {
+          dayRemainingTimeEl.textContent = formatRemainingTime(dayScheduleEndMinutes - currentMinutes);
+        } else {
+          dayRemainingTimeEl.textContent = "일과 시간 아님";
+        }
       }
 
       if (currentSchedule) {
