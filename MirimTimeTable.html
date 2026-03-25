@@ -187,6 +187,7 @@
     }
 
     .table-shell {
+      position: relative;
       background: var(--surface-strong);
       border: 1px solid var(--border);
       border-radius: 24px;
@@ -196,6 +197,7 @@
     }
 
     table {
+      position: relative;
       width: 100%;
       min-width: 980px;
       border-collapse: separate;
@@ -458,6 +460,45 @@
       color: transparent;
     }
 
+    .floating-time-line {
+      position: absolute;
+      height: 3px;
+      background: var(--current-bar);
+      border-radius: 999px;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .floating-time-label {
+      position: absolute;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--current-bar);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1;
+      z-index: 7;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    }
+
+    tbody tr.current-row > th::after,
+    tbody tr.current-row > td::after,
+    tbody tr.break-target-row > td::after {
+      content: none !important;
+    }
+
+    tbody tr.current-row > th .time-marker,
+    tbody tr.break-target-row > th .time-marker {
+      display: none !important;
+    }
+
     @media (max-width: 980px) {
       .top-grid {
         grid-template-columns: 1fr;
@@ -561,6 +602,12 @@
       .theme-toggle {
         width: 100%;
       }
+
+      .floating-time-label {
+        min-width: 36px;
+        padding: 2px 6px;
+        font-size: 0.66rem;
+      }
     }
 
     @media (max-width: 520px) {
@@ -598,7 +645,7 @@
           <span class="status-value" id="remainingTime">계산 중...</span>
         </div>
         <div class="status-item">
-          <span class="status-label">일과 전체 남은 시간</span>
+          <span class="status-label">일과 남은 시간</span>
           <span class="status-value" id="dayRemainingTime">계산 중...</span>
         </div>
         <div class="status-item">
@@ -955,7 +1002,7 @@
       document.querySelectorAll("tbody tr").forEach((row) => row.classList.remove("today-row", "current-row", "break-target-row"));
       document.querySelectorAll("tbody td").forEach((cell) => cell.classList.remove("today-cell", "current-cell"));
       document.querySelectorAll("thead th").forEach((cell) => cell.classList.remove("today-column-header", "current-day-column-header"));
-      document.querySelectorAll(".time-marker").forEach((marker) => marker.remove());
+      document.querySelectorAll(".time-marker, .floating-time-line, .floating-time-label").forEach((node) => node.remove());
     }
 
     function updateHighlights(currentSchedule, dayOfWeek, highlightSchedule) {
@@ -982,14 +1029,6 @@
           const isBreakTarget = currentSchedule?.type === "break";
           currentRow.classList.add(isBreakTarget ? "break-target-row" : "current-row");
 
-          const rowHeader = currentRow.querySelector("th");
-          if (rowHeader && currentTimeEl) {
-            const marker = document.createElement("span");
-            marker.className = "time-marker";
-            marker.textContent = currentTimeEl.textContent;
-            rowHeader.appendChild(marker);
-          }
-
           const cells = currentRow.querySelectorAll("td");
           if (cells.length === 5 && dayOfWeek >= 1 && dayOfWeek <= 5) {
             const currentCell = cells[dayOfWeek - 1];
@@ -999,6 +1038,42 @@
           }
         }
       }
+    }
+
+    function renderFloatingTimeline(currentSchedule, highlightSchedule, dayOfWeek, progress) {
+      const table = document.querySelector("table");
+      if (!table || !highlightSchedule || highlightSchedule.type !== "schedule") return;
+      if (!(dayOfWeek >= 1 && dayOfWeek <= 5)) return;
+      if (!currentTimeEl) return;
+
+      const targetRow = document.querySelector(`tbody tr[data-period="${highlightSchedule.name}"]`);
+      if (!targetRow) return;
+
+      const rowHeader = targetRow.querySelector("th");
+      const cells = targetRow.querySelectorAll("td");
+      if (!rowHeader || cells.length !== 5) return;
+
+      const firstCell = cells[0];
+      const lastCell = cells[cells.length - 1];
+      const isBreakTarget = currentSchedule?.type === "break";
+      const clampedProgress = Math.max(0, Math.min(100, progress));
+      const lineTop = isBreakTarget
+        ? targetRow.offsetTop
+        : targetRow.offsetTop + ((targetRow.offsetHeight - 3) * clampedProgress / 100);
+
+      const line = document.createElement("div");
+      line.className = "floating-time-line";
+      line.style.left = `${firstCell.offsetLeft + 12}px`;
+      line.style.width = `${(lastCell.offsetLeft + lastCell.offsetWidth) - (firstCell.offsetLeft + 12) - 12}px`;
+      line.style.top = `${lineTop}px`;
+      table.appendChild(line);
+
+      const label = document.createElement("span");
+      label.className = "floating-time-label";
+      label.textContent = currentTimeEl.textContent;
+      label.style.left = `${rowHeader.offsetLeft + 8}px`;
+      label.style.top = `${lineTop}px`;
+      table.appendChild(label);
     }
 
     function getCurrentSubjectAndRoom(currentSchedule, dayOfWeek) {
@@ -1088,10 +1163,10 @@
         if (currentPeriodEl) {
           if (currentSchedule.type === "break") {
             currentPeriodEl.textContent = `${currentSchedule.name} (${format12Hour(currentSchedule.start)} ~ ${format12Hour(currentSchedule.end)})`;
-          } else if (currentSchedule.merged) {
-            currentPeriodEl.textContent = `${currentSchedule.name} (${format12Hour(currentSchedule.start)} ~ ${format12Hour(currentSchedule.end)})`;
           } else if (!subject) {
             currentPeriodEl.textContent = "일과 시간 아님";
+          } else if (currentSchedule.merged) {
+            currentPeriodEl.textContent = `${currentSchedule.name} (${format12Hour(currentSchedule.start)} ~ ${format12Hour(currentSchedule.end)})`;
           } else {
             currentPeriodEl.textContent = `${currentSchedule.name} · ${subject}`;
           }
@@ -1104,16 +1179,19 @@
         }
 
         if (currentRoomEl) {
-          currentRoomEl.textContent = room;
+          currentRoomEl.textContent = !subject && currentSchedule.type === "schedule"
+            ? "일과 시간 아님"
+            : room;
         }
       } else {
         if (currentPeriodEl) currentPeriodEl.textContent = "일과 시간 아님";
         if (remainingTimeEl) remainingTimeEl.textContent = "일과 시간 아님";
-        if (currentRoomEl) currentRoomEl.textContent = dayOfWeek === 0 || dayOfWeek === 6 ? "주말" : "미지정";
+        if (currentRoomEl) currentRoomEl.textContent = "일과 시간 아님";
       }
 
       updateHighlights(currentSchedule, dayOfWeek, highlightSchedule);
       document.documentElement.style.setProperty("--period-progress", `${currentProgress}`);
+      renderFloatingTimeline(currentSchedule, highlightSchedule, dayOfWeek, currentProgress);
     }
 
     themeToggle.addEventListener("click", () => {
