@@ -199,6 +199,7 @@
       border-radius: 24px;
       padding: 14px;
       overflow-x: auto;
+      overflow-y: visible;
       transition: background 0.28s ease, border-color 0.28s ease;
     }
 
@@ -481,14 +482,15 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 42px;
-      padding: 2px 7px;
+      min-width: 48px;
+      padding: 2px 8px;
       border-radius: 999px;
       background: var(--current-bar);
       color: #ffffff;
       font-size: 0.72rem;
       font-weight: 700;
       line-height: 1;
+      white-space: nowrap;
       z-index: 7;
       pointer-events: none;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
@@ -626,8 +628,8 @@
       }
 
       .floating-time-label {
-        min-width: 36px;
-        padding: 2px 6px;
+        min-width: 40px;
+        padding: 2px 7px;
         font-size: 0.66rem;
       }
     }
@@ -722,7 +724,7 @@
           <tr data-period="3교시">
             <th>3교시<br /><span class="time">오전 10:20 ~ 오전 11:10</span></th>
             <td data-subject="공통영어"><div class="subject"><span class="subject-name">공통영어</span></div></td>
-            <td data-subject="공통국어"><div class="subject"><span class="subject-name">공통국어</span></div></td>
+            <td data-subject="공통국어 (이대형)"><div class="subject"><span class="subject-name">공통국어</span></div></td>
             <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
             <td data-subject="기술가정"><div class="subject"><span class="subject-name">기술가정</span></div></td>
             <td data-subject="한국사"><div class="subject"><span class="subject-name">한국사</span></div></td>
@@ -1050,7 +1052,7 @@
         });
       }
 
-      if (highlightSchedule && highlightSchedule.type === "schedule") {
+      if (highlightSchedule) {
         const currentRow = document.querySelector(`tbody tr[data-period="${highlightSchedule.name}"]`);
         if (currentRow) {
           const isBreakTarget = currentSchedule?.type === "break";
@@ -1069,7 +1071,7 @@
 
     function renderFloatingTimeline(currentSchedule, highlightSchedule, dayOfWeek, progress) {
       const table = document.querySelector("table");
-      if (!table || !highlightSchedule || highlightSchedule.type !== "schedule") return;
+      if (!table || !highlightSchedule) return;
       if (!(dayOfWeek >= 1 && dayOfWeek <= 5)) return;
       if (!currentTimeEl) return;
 
@@ -1078,29 +1080,44 @@
 
       const rowHeader = targetRow.querySelector("th");
       const cells = targetRow.querySelectorAll("td");
-      if (!rowHeader || cells.length !== 5) return;
+      if (!rowHeader || cells.length === 0) return;
 
       const firstCell = cells[0];
       const lastCell = cells[cells.length - 1];
       const isBreakTarget = currentSchedule?.type === "break";
       const clampedProgress = Math.max(0, Math.min(100, progress));
-      const lineTop = isBreakTarget
+      const rawLineTop = isBreakTarget
         ? targetRow.offsetTop
         : targetRow.offsetTop + ((targetRow.offsetHeight - 3) * clampedProgress / 100);
-
-      const line = document.createElement("div");
-      line.className = "floating-time-line";
-      line.style.left = `${firstCell.offsetLeft + 12}px`;
-      line.style.width = `${(lastCell.offsetLeft + lastCell.offsetWidth) - (firstCell.offsetLeft + 12) - 12}px`;
-      line.style.top = `${lineTop}px`;
-      table.appendChild(line);
 
       const label = document.createElement("span");
       label.className = "floating-time-label";
       label.textContent = currentTimeEl.textContent;
-      label.style.left = `${rowHeader.offsetLeft + 8}px`;
-      label.style.top = `${lineTop}px`;
+      label.style.visibility = "hidden";
       table.appendChild(label);
+
+      const safeLeft = rowHeader.offsetLeft + 4;
+
+      const halfLabelHeight = label.offsetHeight / 2;
+      const safeTop = isBreakTarget
+        ? targetRow.offsetTop
+        : Math.max(
+            targetRow.offsetTop + halfLabelHeight + 6,
+            Math.min(targetRow.offsetTop + targetRow.offsetHeight - halfLabelHeight - 6, rawLineTop)
+          );
+
+      label.style.left = `${safeLeft}px`;
+      label.style.top = `${safeTop}px`;
+      label.style.visibility = "visible";
+
+      const line = document.createElement("div");
+      line.className = "floating-time-line";
+      const lineLeft = safeLeft + label.offsetWidth - 6;
+      const lineRight = (lastCell.offsetLeft + lastCell.offsetWidth) - 12;
+      line.style.left = `${lineLeft}px`;
+      line.style.width = `${Math.max(0, lineRight - lineLeft)}px`;
+      line.style.top = `${safeTop}px`;
+      table.appendChild(line);
     }
 
     function getCurrentSubjectAndRoom(currentSchedule, dayOfWeek) {
