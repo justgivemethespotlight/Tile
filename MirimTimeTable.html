@@ -888,6 +888,18 @@
       return `${minutes}분 남음`;
     }
 
+    function formatBeforeSchoolTime(diffMinutes) {
+      if (diffMinutes <= 0) return "곧 시작";
+
+      const totalMinutes = Math.ceil(diffMinutes);
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+
+      if (hours > 0 && minutes > 0) return `일과 ${hours}시간 ${minutes}분 전`;
+      if (hours > 0) return `일과 ${hours}시간 전`;
+      return `일과 ${minutes}분 전`;
+    }
+
     function getCurrentSchedule(minutesNow) {
       for (const item of scheduleRanges) {
         const start = toMinutes(item.start);
@@ -1116,7 +1128,7 @@
       const lineRight = (lastCell.offsetLeft + lastCell.offsetWidth) - 12;
       line.style.left = `${lineLeft}px`;
       line.style.width = `${Math.max(0, lineRight - lineLeft)}px`;
-      line.style.top = `${safeTop}px`;
+      line.style.top = `${rawLineTop}px`;
       table.appendChild(line);
     }
 
@@ -1193,8 +1205,17 @@
       const dayScheduleEndMinutes = dayScheduleEnd ? toMinutes(dayScheduleEnd) : null;
 
       if (dayRemainingTimeEl) {
-        if (isSchoolWeekday && dayScheduleEndMinutes !== null && currentMinutes < dayScheduleEndMinutes) {
-          dayRemainingTimeEl.textContent = formatRemainingTime(dayScheduleEndMinutes - currentMinutes);
+        const dayStartMinutes = toMinutes(scheduleRanges[0].start);
+        const schoolPreviewStartMinutes = 6 * 60;
+
+        if (isSchoolWeekday && dayScheduleEndMinutes !== null) {
+          if (currentMinutes >= schoolPreviewStartMinutes && currentMinutes < dayStartMinutes) {
+            dayRemainingTimeEl.textContent = formatBeforeSchoolTime(dayStartMinutes - currentMinutes);
+          } else if (currentMinutes >= dayStartMinutes && currentMinutes < dayScheduleEndMinutes) {
+            dayRemainingTimeEl.textContent = formatRemainingTime(dayScheduleEndMinutes - currentMinutes);
+          } else {
+            dayRemainingTimeEl.textContent = "일과 시간 아님";
+          }
         } else {
           dayRemainingTimeEl.textContent = "일과 시간 아님";
         }
