@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-  <title>미림마이스터고등학교 1-2 시간표</title>
+  <title>MirimTimeTable.Html by 1203 Yul</title> <!-- 여기에 사이트 제목 !-->
   <style>
     :root {
       color-scheme: light;
@@ -201,6 +201,20 @@
       overflow-x: auto;
       overflow-y: visible;
       transition: background 0.28s ease, border-color 0.28s ease;
+    }
+
+    .site-footer {
+      margin-top: 18px;
+      padding: 14px 4px 2px;
+      color: var(--text-soft);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .site-footer strong {
+      color: var(--text);
+      font-weight: 700;
     }
 
     table {
@@ -647,8 +661,8 @@
   <div class="container">
     <div class="hero">
       <div class="hero-copy">
-        <h1>MirimTimeTable.html</h1>
-        <p class="subtitle">Made By 1203 Yul</p>
+        <h1>MirimTimeTable.Html</h1>
+        <p class="subtitle">by 1203 Yul</p>
       </div>
       <div class="controls">
         <button class="theme-toggle" id="themeToggle" type="button">다크 모드</button>
@@ -666,7 +680,7 @@
           <span class="status-value" id="currentPeriod">확인 중...</span>
         </div>
         <div class="status-item">
-          <span class="status-label">교시 남은 시간</span>
+          <span class="status-label" id="remainingTimeLabel">교시 남은 시간</span>
           <span class="status-value" id="remainingTime">계산 중...</span>
         </div>
         <div class="status-item">
@@ -724,7 +738,7 @@
           <tr data-period="3교시">
             <th>3교시<br /><span class="time">오전 10:20 ~ 오전 11:10</span></th>
             <td data-subject="공통영어"><div class="subject"><span class="subject-name">공통영어</span></div></td>
-            <td data-subject="공통국어 (이대형)"><div class="subject"><span class="subject-name">공통국어</span></div></td>
+            <td data-subject="공통국어"><div class="subject"><span class="subject-name">공통국어</span></div></td>
             <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
             <td data-subject="기술가정"><div class="subject"><span class="subject-name">기술가정</span></div></td>
             <td data-subject="한국사"><div class="subject"><span class="subject-name">한국사</span></div></td>
@@ -792,6 +806,11 @@
         </tbody>
       </table>
     </div>
+
+    <div class="site-footer">
+      <div><strong>구성 언어</strong> · HTML, CSS, JavaScript</div>
+      <div><strong>개발자</strong> · 미림마이스터고등학교 1203 권율 · Insta @justcallmelight_</div>
+    </div>
   </div>
 
   <script>
@@ -809,7 +828,7 @@
       "기술가정": "1-2",
       "일본어": "1-2",
       "자치": "1-2",
-      "동아리": "도서관",
+      "동아리": "꿈담카페, 사회정서탐구반",
       "체육": "체육관"
     };
 
@@ -1189,6 +1208,7 @@
         ? (currentSchedule.type === "break" ? 0 : getScheduleProgress(currentSchedule, currentMinutes))
         : 0;
       const currentPeriodEl = document.getElementById("currentPeriod");
+      const remainingTimeLabelEl = document.getElementById("remainingTimeLabel");
       const remainingTimeEl = document.getElementById("remainingTime");
       const dayRemainingTimeEl = document.getElementById("dayRemainingTime");
       const currentRoomEl = document.getElementById("currentRoom");
@@ -1200,6 +1220,9 @@
 
       if (todayLabelEl) {
         todayLabelEl.textContent = `${dayNames[dayOfWeek]}요일`;
+      }
+      if (remainingTimeLabelEl) {
+        remainingTimeLabelEl.textContent = currentSchedule?.type === "break" ? "남은 쉬는 시간" : "교시 남은 시간";
       }
 
       const isSchoolWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
