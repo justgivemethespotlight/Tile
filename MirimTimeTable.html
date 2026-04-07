@@ -828,7 +828,7 @@
       "기술가정": "1-2",
       "일본어": "1-2",
       "자치": "1-2",
-      "동아리": "꿈담카페, 사회정서탐구반",
+      "동아리": "도서관",
       "체육": "체육관"
     };
 
@@ -1129,18 +1129,10 @@
 
       const safeLeft = rowHeader.offsetLeft + 4;
 
-      const halfLabelHeight = label.offsetHeight / 2;
-      const safeTop = isBreakTarget
-        ? targetRow.offsetTop
-        : Math.max(
-            targetRow.offsetTop + halfLabelHeight + 6,
-            Math.min(targetRow.offsetTop + targetRow.offsetHeight - halfLabelHeight - 6, rawLineTop)
-          );
-
-      const lineTop = isBreakTarget ? targetRow.offsetTop : safeTop;
+      const syncedTop = isBreakTarget ? targetRow.offsetTop : rawLineTop;
 
       label.style.left = `${safeLeft}px`;
-      label.style.top = `${lineTop}px`;
+      label.style.top = `${syncedTop}px`;
       label.style.visibility = "visible";
 
       const line = document.createElement("div");
@@ -1149,7 +1141,7 @@
       const lineRight = (lastCell.offsetLeft + lastCell.offsetWidth) - 12;
       line.style.left = `${lineLeft}px`;
       line.style.width = `${Math.max(0, lineRight - lineLeft)}px`;
-      line.style.top = `${lineTop}px`;
+      line.style.top = `${syncedTop}px`;
       table.appendChild(line);
     }
 
