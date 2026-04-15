@@ -99,6 +99,20 @@ MirimTimeTable의 가장 큰 차별점은 단순한 시간표가 아니라,
 
 ---
 
+## Roadmap
+
+- [x] Static timetable page
+- [x] Real-time current period detection
+- [x] Remaining time display
+- [x] Classroom / teacher info
+- [x] Dark mode
+- [x] Mobile responsive UI
+- [ ] Custom school timetable editor
+- [ ] User-based class settings
+- [ ] Web service version
+- [ ] App version
+- [ ] Integrated timetable platform
+
 ## File Structure
 
 ```bash
