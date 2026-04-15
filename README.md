@@ -1,7 +1,8 @@
 # MirimTimeTable
 
 > **Code Composition**  
-> HTML 30% · CSS 44% · JavaScript 26%
+> HTML 30% · CSS 44% · JavaScript 26% <br>
+> 단일 HTML 파일 기반 구조
 
 **MirimTimeTable**은 HTML 방과후 수업 시간에 “간단한 시간표를 직접 만들어보자”는 생각에서 시작한 프로젝트입니다.  
 처음에는 정적인 형태의 단순한 시간표 페이지였지만, 만들면서 아쉬운 점이 점점 보이기 시작했습니다.  
