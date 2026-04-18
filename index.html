@@ -1,0 +1,172 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <title>MirimTimeTable.Html by 1203 Yul</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="iphone-safe-zone" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="hero">
+      <div class="hero-copy">
+        <h1>MirimTimeTable.Html</h1>
+        <p class="subtitle">by 1203 Yul</p>
+      </div>
+      <div class="controls">
+        <button class="theme-toggle" id="themeToggle" type="button">다크 모드</button>
+      </div>
+    </div>
+
+    <div class="top-grid">
+      <div class="status-card">
+        <div class="status-item">
+          <span class="status-label">현재 시간</span>
+          <span class="status-value" id="currentTime">불러오는 중...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">현재 진행</span>
+          <span class="status-value" id="currentPeriod">확인 중...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label" id="remainingTimeLabel">교시 남은 시간</span>
+          <span class="status-value" id="remainingTime">계산 중...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">일과 남은 시간</span>
+          <span class="status-value" id="dayRemainingTime">계산 중...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">현재 교실</span>
+          <span class="status-value" id="currentRoom">확인 중...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-shell">
+      <table>
+        <colgroup>
+          <col class="time-col" />
+          <col class="day-col" />
+          <col class="day-col" />
+          <col class="day-col" />
+          <col class="day-col" />
+          <col class="day-col" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>교시</th>
+            <th data-day="1">월</th>
+            <th data-day="2">화</th>
+            <th data-day="3">수</th>
+            <th data-day="4">목</th>
+            <th data-day="5">금</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-period="조회">
+            <th>조회<br /><span class="time">오전 8:10 ~ 오전 8:20</span></th>
+            <td class="homeroom" colspan="5">조회</td>
+          </tr>
+          <tr data-period="1교시">
+            <th>1교시<br /><span class="time">오전 8:20 ~ 오전 9:10</span></th>
+            <td data-subject="자치"><div class="subject"><span class="subject-name">자치</span></div></td>
+            <td data-subject="MC"><div class="subject"><span class="subject-name">MC</span></div></td>
+            <td data-subject="공통영어"><div class="subject"><span class="subject-name">공통영어</span></div></td>
+            <td data-subject="MC"><div class="subject"><span class="subject-name">MC</span></div></td>
+            <td data-subject="기술가정"><div class="subject"><span class="subject-name">기술가정</span></div></td>
+          </tr>
+          <tr data-period="2교시">
+            <th>2교시<br /><span class="time">오전 9:20 ~ 오전 10:10</span></th>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td data-subject="체육"><div class="subject"><span class="subject-name">체육</span></div></td>
+            <td data-subject="공통국어 (이대형)"><div class="subject"><span class="subject-name">공통국어</span></div></td>
+            <td data-subject="MC"><div class="subject"><span class="subject-name">MC</span></div></td>
+            <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
+          </tr>
+          <tr data-period="3교시">
+            <th>3교시<br /><span class="time">오전 10:20 ~ 오전 11:10</span></th>
+            <td data-subject="공통영어"><div class="subject"><span class="subject-name">공통영어</span></div></td>
+            <td data-subject="공통국어"><div class="subject"><span class="subject-name">공통국어</span></div></td>
+            <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
+            <td data-subject="기술가정"><div class="subject"><span class="subject-name">기술가정</span></div></td>
+            <td data-subject="한국사"><div class="subject"><span class="subject-name">한국사</span></div></td>
+          </tr>
+          <tr data-period="4교시">
+            <th>4교시<br /><span class="time">오전 11:20 ~ 오후 12:10</span></th>
+            <td data-subject="성직"><div class="subject"><span class="subject-name">성직</span></div></td>
+            <td data-subject="성직"><div class="subject"><span class="subject-name">성직</span></div></td>
+            <td data-subject="한국사"><div class="subject"><span class="subject-name">한국사</span></div></td>
+            <td data-subject="일본어"><div class="subject"><span class="subject-name">일본어</span></div></td>
+            <td data-subject="일본어"><div class="subject"><span class="subject-name">일본어</span></div></td>
+          </tr>
+          <tr data-period="중식">
+            <th>중식<br /><span class="time">오후 12:10 ~ 오후 1:00</span></th>
+            <td class="meal" colspan="5">중식</td>
+          </tr>
+          <tr data-period="5교시">
+            <th>5교시<br /><span class="time">오후 1:00 ~ 오후 1:50</span></th>
+            <td data-subject="한국사"><div class="subject"><span class="subject-name">한국사</span></div></td>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td data-subject="일본어"><div class="subject"><span class="subject-name">일본어</span></div></td>
+            <td data-subject="공통국어"><div class="subject"><span class="subject-name">공통국어</span></div></td>
+            <td data-subject="공통영어"><div class="subject"><span class="subject-name">공통영어</span></div></td>
+          </tr>
+          <tr data-period="6교시">
+            <th>6교시<br /><span class="time">오후 2:00 ~ 오후 2:50</span></th>
+            <td data-subject="기술가정"><div class="subject"><span class="subject-name">기술가정</span></div></td>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td data-subject="동아리"><div class="subject"><span class="subject-name">동아리</span></div></td>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td data-subject="체육"><div class="subject"><span class="subject-name">체육</span></div></td>
+          </tr>
+          <tr data-period="7교시">
+            <th>7교시<br /><span class="time">오후 3:00 ~ 오후 3:50</span></th>
+            <td class="empty-cell"></td>
+            <td data-subject="공통수학"><div class="subject"><span class="subject-name">공통수학</span></div></td>
+            <td data-subject="동아리"><div class="subject"><span class="subject-name">동아리</span></div></td>
+            <td data-subject="JAVA"><div class="subject"><span class="subject-name">JAVA</span></div></td>
+            <td class="empty-cell"></td>
+          </tr>
+          <tr data-period="종례">
+            <th>종례<br /><span class="time">오후 3:50 ~ 오후 4:30</span></th>
+            <td class="homeroom" colspan="5">종례</td>
+          </tr>
+          <tr data-period="방과후 A">
+            <th>방과후 A<br /><span class="time">오후 4:30 ~ 오후 5:20</span></th>
+            <td class="empty-cell"></td>
+            <td data-subject="방과후학교 A"><div class="subject"><span class="subject-name">방과후학교 A</span></div></td>
+            <td class="empty-cell"></td>
+            <td data-subject="방과후학교 A"><div class="subject"><span class="subject-name">방과후학교 A</span></div></td>
+            <td class="empty-cell"></td>
+          </tr>
+          <tr data-period="석식">
+            <th>석식<br /><span class="time">오후 5:20 ~ 오후 6:20</span></th>
+            <td class="meal" colspan="5">석식</td>
+          </tr>
+          <tr data-period="방과후 B">
+            <th>방과후 B<br /><span class="time">오후 6:20 ~ 오후 8:00</span></th>
+            <td class="empty-cell"></td>
+            <td data-subject="방과후학교 B"><div class="subject"><span class="subject-name">방과후학교 B</span></div></td>
+            <td class="empty-cell"></td>
+            <td data-subject="방과후학교 B"><div class="subject"><span class="subject-name">방과후학교 B</span></div></td>
+            <td class="empty-cell"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="site-footer">
+      <div><strong>구성 언어</strong> · HTML, CSS, JavaScript</div>
+      <div><strong>개발자</strong> · 미림마이스터고등학교 1203 권율 | Insta @justcallmelight_</div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
