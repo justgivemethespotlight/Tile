@@ -1,6 +1,10 @@
 # MirimTimeTable
 
-> HTML, CSS, JavaScript
+> 학교 일과 관리를 를 위한 Realtime System 기반 자동화 Timetable<br>
+> ![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
 
 **MirimTimeTable**은 HTML 방과후 수업 시간에 “간단한 시간표를 직접 만들어보자”는 생각에서 시작한 프로젝트입니다.  
 처음에는 정적인 형태의 단순한 시간표 페이지였지만, 만들면서 아쉬운 점이 점점 보이기 시작했습니다.  
