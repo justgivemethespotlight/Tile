@@ -116,4 +116,6 @@ MirimTimeTable의 가장 큰 차별점은 단순한 시간표가 아니라,
 ## File Structure
 
 ```bash
-MirimTimeTable.html
+index.html
+style.css
+script.js
