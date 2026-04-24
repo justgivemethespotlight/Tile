@@ -2,9 +2,7 @@
 > 학교 일과 관리를 를 위한 Realtime System 기반 자동화 TimeTable<br>
 >
 > <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"><br>
-> <img src="https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white">
-<img src="https://img.shields.io/badge/Developing-3178C6?style=for-the-badge"> <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white"> <img src="https://img.shields.io/badge/Developing-3178C6?style=for-the-badge"> <a href="https://본인ID.github.io/리포지토리명">
-  <img src="https://img.shields.io/badge/Web-005C94?style=for-the-badge&logo=googlechrome&logoColor=white"> <img src="https://img.shields.io/badge/Beta-44CC11?style=for-the-badge"> <br>
+> <img src="https://img.shields.io/badge/Web-Beta-orange?style=for-the-badge&logo=googlechrome&logoColor=white&labelColor=4285F4"> <img src="https://img.shields.io/badge/iOS-Alpha-red?style=for-the-badge&logo=apple&logoColor=white&labelColor=000000"> <img src="https://img.shields.io/badge/Android-Developing-3178C6?style=for-the-badge&logo=android&logoColor=white&labelColor=3DDC84"> <br>
 > [MirimTimeTable.html](https://justgivemethespotlight.github.io/MirimTimeTable/index.html)
 
 
