@@ -3,7 +3,7 @@
 >
 > <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"><br>
 > <img src="https://img.shields.io/badge/Web-Beta-orange?style=for-the-badge&logo=googlechrome&logoColor=white&labelColor=4285F4"> <img src="https://img.shields.io/badge/iOS-Alpha-red?style=for-the-badge&logo=apple&logoColor=white&labelColor=000000"> <img src="https://img.shields.io/badge/Android-Developing-3178C6?style=for-the-badge&logo=android&logoColor=white&labelColor=3DDC84"> <br>
-> [MirimTimeTable.html](https://justgivemethespotlight.github.io/MirimTimeTable/index.html)
+> Web Site: [MirimTimeTable.html](https://justgivemethespotlight.github.io/MirimTimeTable/index.html)
 
 
 **MirimTimeTable**은 HTML 방과후 수업 시간에 “간단한 시간표를 직접 만들어보자”는 생각에서 시작한 프로젝트입니다.  
