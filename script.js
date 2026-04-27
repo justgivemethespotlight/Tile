@@ -325,7 +325,7 @@ function updateHighlights(currentSchedule, dayOfWeek, highlightSchedule) {
   if (highlightSchedule) {
     const currentRow = document.querySelector(`tbody tr[data-period="${highlightSchedule.name}"]`);
     if (currentRow) {
-      const isBreakTarget = currentSchedule?.type === "break";
+      const isBreakTarget = currentSchedule && currentSchedule.type === "break";
       currentRow.classList.add(isBreakTarget ? "break-target-row" : "current-row");
 
       const cells = currentRow.querySelectorAll("td");
@@ -353,7 +353,7 @@ function renderFloatingTimeline(currentSchedule, highlightSchedule, dayOfWeek, p
   if (!rowHeader || cells.length === 0) return;
 
   const lastCell = cells[cells.length - 1];
-  const isBreakTarget = currentSchedule?.type === "break";
+  const isBreakTarget = currentSchedule && currentSchedule.type === "break";
   const clampedProgress = Math.max(0, Math.min(100, progress));
   const rawLineTop = isBreakTarget
     ? targetRow.offsetTop
@@ -410,7 +410,7 @@ function getCurrentSubjectAndRoom(currentSchedule, dayOfWeek) {
   }
 
   const currentCell = cells[dayOfWeek - 1];
-  const subject = currentCell?.dataset.subject || "";
+  const subject = currentCell && currentCell.dataset ? currentCell.dataset.subject || "" : "";
   if (!subject) {
     return { subject: "", room: "일과 시간 아님" };
   }
@@ -430,7 +430,7 @@ function updateCurrentStatus() {
   const dayOfWeek = now.getDay();
 
   const currentSchedule = getCurrentSchedule(currentMinutes);
-  const highlightSchedule = currentSchedule?.type === "break"
+  const highlightSchedule = currentSchedule && currentSchedule.type === "break"
     ? getNextScheduleAfter(currentMinutes)
     : currentSchedule;
   const currentProgress = currentSchedule
@@ -452,7 +452,7 @@ function updateCurrentStatus() {
   }
 
   if (remainingTimeLabelEl) {
-    remainingTimeLabelEl.textContent = currentSchedule?.type === "break" ? "남은 쉬는 시간" : "교시 남은 시간";
+    remainingTimeLabelEl.textContent = currentSchedule && currentSchedule.type === "break" ? "남은 쉬는 시간" : "교시 남은 시간";
   }
 
   const isSchoolWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
