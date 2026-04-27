@@ -151,6 +151,14 @@ h1 {
   border-color: #111111;
 }
 
+body:not(.dark-mode) .theme-toggle.theme-target-dark {
+  box-shadow: 0 4px 14px rgba(17, 17, 17, 0.35);
+}
+
+body:not(.dark-mode) .theme-toggle.theme-target-dark:hover {
+  box-shadow: 0 12px 26px rgba(17, 17, 17, 0.48);
+}
+
 .theme-toggle.theme-target-light {
   background: #ffffff;
   color: #111111;
