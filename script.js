@@ -62,6 +62,32 @@ const themeToggle = document.getElementById("themeToggle");
 const todayOnlyToggle = document.getElementById("todayOnlyToggle");
 const currentTimeEl = document.getElementById("currentTime");
 
+function triggerButtonPop(buttonEl) {
+  if (!buttonEl) return;
+
+  // Prefer Web Animations API (avoids forced reflow / less jank on Safari)
+  if (typeof buttonEl.animate === "function") {
+    buttonEl.animate(
+      [
+        { transform: "translateY(0) scale(1)" },
+        { transform: "translateY(-2px) scale(1.06)", offset: 0.45 },
+        { transform: "translateY(0) scale(1)" }
+      ],
+      { duration: 220, easing: "cubic-bezier(0.2, 0.9, 0.2, 1)" }
+    );
+    return;
+  }
+
+  // Fallback
+  buttonEl.classList.remove("popped");
+  window.requestAnimationFrame(() => {
+    buttonEl.classList.add("popped");
+    window.setTimeout(() => {
+      buttonEl.classList.remove("popped");
+    }, 260);
+  });
+}
+
 function updateIPhoneSafeZone() {
   const isIPhone = /iPhone/i.test(navigator.userAgent);
   document.body.classList.toggle("has-iphone-safe-zone", isIPhone);
@@ -516,6 +542,7 @@ function updateCurrentStatus() {
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
+    triggerButtonPop(themeToggle);
     document.body.classList.toggle("dark-mode");
     const isDark = document.body.classList.contains("dark-mode");
     localStorage.setItem("mirim-theme", isDark ? "dark" : "light");
@@ -525,6 +552,7 @@ if (themeToggle) {
 
 if (todayOnlyToggle) {
   todayOnlyToggle.addEventListener("click", () => {
+    triggerButtonPop(todayOnlyToggle);
     const isTodayOnly = localStorage.getItem("mirim-today-only") === "on";
     localStorage.setItem("mirim-today-only", isTodayOnly ? "off" : "on");
     applyTodayOnlyMode();
