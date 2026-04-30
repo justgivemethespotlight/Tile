@@ -272,9 +272,18 @@ function initTheme() {
   updateThemeButton();
 }
 
+
 function getTodayScheduleDay() {
   const day = new Date().getDay();
   return day >= 1 && day <= 5 ? day : null;
+}
+
+function getActiveScheduleDay() {
+  return getTodayScheduleDay() || 1;
+}
+
+function isMobileTimetableView() {
+  return window.matchMedia("(max-width: 768px)").matches;
 }
 
 function hideColumnByDay(day) {
@@ -306,10 +315,12 @@ function updateTodayOnlyButton(todayDay, isActive) {
 }
 
 function applyTodayOnlyMode() {
+  const isMobile = isMobileTimetableView();
   const isTodayOnly = localStorage.getItem("mirim-today-only") === "on";
-  const todayDay = getTodayScheduleDay();
-  const shouldApply = isTodayOnly && Boolean(todayDay);
+  const activeDay = getActiveScheduleDay();
+  const shouldApply = isMobile || isTodayOnly;
   document.body.classList.toggle("today-only-mode", shouldApply);
+  document.body.classList.toggle("mobile-today-mode", isMobile);
 
   document.querySelectorAll(".today-only-hidden").forEach((node) => {
     node.classList.remove("today-only-hidden");
@@ -317,15 +328,15 @@ function applyTodayOnlyMode() {
     node.style.visibility = "";
   });
 
-  if (shouldApply && todayDay) {
+  if (shouldApply) {
     [1, 2, 3, 4, 5].forEach((day) => {
-      if (day !== todayDay) {
+      if (day !== activeDay) {
         hideColumnByDay(day);
       }
     });
   }
 
-  updateTodayOnlyButton(todayDay, shouldApply);
+  updateTodayOnlyButton(activeDay, shouldApply);
 }
 
 function clearHighlights() {
@@ -560,8 +571,10 @@ if (themeToggle) {
 if (todayOnlyToggle) {
   todayOnlyToggle.addEventListener("click", () => {
     triggerButtonPop(todayOnlyToggle);
-    const isTodayOnly = localStorage.getItem("mirim-today-only") === "on";
-    localStorage.setItem("mirim-today-only", isTodayOnly ? "off" : "on");
+    if (!isMobileTimetableView()) {
+      const isTodayOnly = localStorage.getItem("mirim-today-only") === "on";
+      localStorage.setItem("mirim-today-only", isTodayOnly ? "off" : "on");
+    }
     applyTodayOnlyMode();
   });
 }
@@ -572,3 +585,8 @@ applyTodayOnlyMode();
 applyRoomBadges();
 updateCurrentStatus();
 setInterval(updateCurrentStatus, 1000);
+
+window.addEventListener("resize", () => {
+  applyTodayOnlyMode();
+  updateCurrentStatus();
+});
