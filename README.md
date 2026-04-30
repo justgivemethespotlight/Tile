@@ -101,18 +101,21 @@ MirimTimeTable의 가장 큰 차별점은 단순한 시간표가 아니라,
 
 ## Roadmap
 
-- [x] Static timetable page
-- [x] Real-time current period detection
-- [x] Remaining time display
-- [x] Classroom / teacher info
-- [x] Dark mode
-- [x] Mobile responsive UI
-- [ ] Custom school timetable editor
-- [ ] User-based class settings
-- [ ] Web service version
-- [ ] App version
-- [ ] Integrated timetable platform
-
+- [x] 웹 시간표 구현
+- [x] 실시간 현재 교시 감지
+- [x] 남은 시간 표시
+- [x] 강의실 / 담당 교사 정보
+- [x] 다크 모드
+- [x] 모바일 반응형 UI
+- [x] 앱에서 오프라인 상태일 경우 앱 내장 로컬 HTML로 Fallback (iOS)
+- [ ] 사용자 별 맞춤형 학교 시간표 편집기
+- [ ] 사용자 별 맞춤형 수업 설정
+- [x] 웹 호스팅
+- [ ] 웹 서비스 버전
+- [x] 앱 제작 (iOS)
+- [ ] 앱 서비스 버전
+- [ ] 통합 시간표 플랫폼
+      
 ## File Structure
 
 ```bash
