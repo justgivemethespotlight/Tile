@@ -732,6 +732,23 @@ tbody tr.break-target-row > th .time-marker {
     min-width: 860px;
   }
 
+  body.mobile-today-mode table {
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.mobile-today-mode col.time-col {
+    width: 44%;
+  }
+
+  body.mobile-today-mode col.day-col {
+    width: 56%;
+  }
+
+  body.mobile-today-mode .today-only-hidden {
+    display: none !important;
+  }
+
   thead th,
   tbody th,
   td {
@@ -778,7 +795,7 @@ tbody tr.break-target-row > th .time-marker {
 
   .controls {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .theme-toggle {
