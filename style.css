@@ -215,11 +215,7 @@ body.dark-mode .theme-toggle.theme-target-light:hover {
 }
 
 .today-only-hidden > * {
-  visibility: hidden !important;
-}
-
-.today-only-hidden::before {
-  content: "\00a0";
+  opacity: 0 !important;
 }
 
 .top-grid {
