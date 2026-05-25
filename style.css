@@ -296,6 +296,85 @@ body.dark-mode .theme-toggle.theme-target-light:hover {
   font-weight: 700;
 }
 
+.custom-panel {
+  display: none;
+  margin-bottom: 24px;
+  padding: 18px;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+
+.custom-panel.is-open {
+  display: block;
+}
+
+.custom-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.custom-panel h2 {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.custom-panel p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.custom-close {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--toggle-bg);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#customTimetableInput {
+  width: 100%;
+  min-height: 280px;
+  resize: vertical;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-soft);
+  color: var(--text);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  outline: none;
+}
+
+#customTimetableInput:focus {
+  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.35);
+}
+
+.custom-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.custom-help {
+  margin-top: 12px !important;
+  font-size: 0.82rem !important;
+}
+
 table {
   position: relative;
   width: 100%;
@@ -804,6 +883,20 @@ tbody tr.break-target-row > th .time-marker {
     min-width: 40px;
     padding: 2px 7px;
     font-size: 0.66rem;
+  }
+
+  .custom-panel {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .custom-panel-header {
+    flex-direction: column;
+  }
+
+  #customTimetableInput {
+    min-height: 240px;
+    font-size: 0.76rem;
   }
 }
 
