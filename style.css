@@ -344,7 +344,8 @@ body.dark-mode .theme-toggle.theme-target-light:hover {
   cursor: pointer;
 }
 
-#customTimetableInput {
+#customTimetableInput,
+#memoInput {
   width: 100%;
   min-height: 280px;
   resize: vertical;
@@ -359,7 +360,8 @@ body.dark-mode .theme-toggle.theme-target-light:hover {
   outline: none;
 }
 
-#customTimetableInput:focus {
+#customTimetableInput:focus,
+#memoInput:focus {
   box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.35);
 }
 
